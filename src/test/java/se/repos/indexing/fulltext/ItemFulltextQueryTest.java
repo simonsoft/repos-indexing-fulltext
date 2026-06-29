@@ -8,12 +8,13 @@ import static org.junit.Assert.*;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
-import se.repos.testing.indexing.ReposTestIndexing;
-import se.repos.testing.indexing.TestIndexOptions;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Tests field rules such as analysis and copy fields, with actual solr queries.
@@ -21,22 +22,18 @@ import se.repos.testing.indexing.TestIndexOptions;
  * There should be no schema features that lack examples in tests,
  * or we'll end up with lots of copy-pasted stuff from solr examples that we don't know what it is for.
  */
+@QuarkusTest
+@TestProfile(SolrRepositemProfile.class)
 public class ItemFulltextQueryTest {
 
-	private ReposTestIndexing indexing = null;
-	private SolrClient repositem = null;
+	@Inject
+	@Named("repositem")
+	SolrClient repositem;
 	
-	@Before
-	public void setUp() {
-		// run indexing without handlers or repository
-		TestIndexOptions options = new TestIndexOptions().itemDefaults();
-		indexing = ReposTestIndexing.getInstance(options);
-		repositem = indexing.getCore("repositem");
-	}
-	
-	@After
-	public void tearDown() {
-		indexing.tearDown(); // TODO make static and set up + tear down only once?
+	@AfterEach
+	public void clearIndex() throws Exception {
+		repositem.deleteByQuery("*:*");
+		repositem.commit();
 	}	
 	
 	@Test
