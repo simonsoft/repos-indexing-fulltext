@@ -14,22 +14,26 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.ISVNFileFilter;
 import org.tmatesoft.svn.core.wc2.SvnImport;
 import org.tmatesoft.svn.core.wc2.SvnOperationFactory;
 import org.tmatesoft.svn.core.wc2.SvnTarget;
 
-import se.repos.testing.indexing.ReposTestIndexing;
-import se.repos.testing.indexing.TestIndexOptions;
-import se.simonsoft.cms.backend.filexml.CmsRepositoryFilexml;
-import se.simonsoft.cms.backend.filexml.FilexmlRepositoryReadonly;
-import se.simonsoft.cms.backend.filexml.FilexmlSourceClasspath;
-import se.simonsoft.cms.backend.filexml.testing.ReposTestBackendFilexml;
-import se.simonsoft.cms.testing.svn.CmsTestRepository;
-import se.simonsoft.cms.testing.svn.SvnTestSetup;
+import jakarta.enterprise.context.control.ActivateRequestContext;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import se.repos.indexing.ReposIndexing;
+import se.repos.indexing.item.IndexingItemStandalone;
+import se.repos.indexing.scheduling.IndexingSchedule;
+import se.repos.indexing.solrj.SolrAdd;
+import se.simonsoft.cms.item.RepoRevision;
 
 /**
  * Test queries on files in an actual test repository.
@@ -38,13 +42,27 @@ import se.simonsoft.cms.testing.svn.SvnTestSetup;
  * for details on extraction and querying use instead
  * {@link ItemFulltextExtractionTest} and {@link ItemFulltextQueryTest}.
  */
+@QuarkusTest
+@TestProfile(SvnSolrRepositemProfile.class)
 public class ItemFulltextIntegrationTest {
 
+	@Inject
+	@Named("repositem")
+	SolrClient repositem;
+
+	@Inject
+	ReposIndexing indexing;
+
+	@Inject
+	IndexingSchedule schedule;
+
+	@Inject
+	SVNRepository svnkit;
 	
-	@After
-	public void tearDown() {
-		SvnTestSetup.getInstance().tearDown();
-		ReposTestIndexing.getInstance().tearDown();
+	@AfterEach
+	public void tearDown() throws SolrServerException, IOException {
+		repositem.deleteByQuery("*:*");
+		repositem.commit();
 	}
 	
 	/**
@@ -52,17 +70,15 @@ public class ItemFulltextIntegrationTest {
 	 * @throws IOException 
 	 */
 	@Test
+	@ActivateRequestContext
 	public void testHandleSearch1Docs() throws SVNException, SolrServerException, IOException {
-		HandlerFulltext handler = new HandlerFulltext();
-		TestIndexOptions options = new TestIndexOptions().itemDefaults().addHandler(handler);
-		
-		CmsTestRepository repo = SvnTestSetup.getInstance().getRepository();
-		SolrClient solr = ReposTestIndexing.getInstance(options).enable(repo).getCore("repositem");
-		
 		File docs = new File("src/test/resources/repos-search-v1");
 		assertTrue(docs.isDirectory());
 		
-		SvnOperationFactory svnkitOp = repo.getSvnkitOp();
+		SolrClient solr = repositem;
+		
+		SvnOperationFactory svnkitOp = new SvnOperationFactory();
+		svnkitOp.setAuthenticationManager(svnkit.getAuthenticationManager());
 		SvnImport imp = svnkitOp.createImport();
 		imp.setSource(docs);
 		imp.setFileFilter(new ISVNFileFilter() {
@@ -77,8 +93,20 @@ public class ItemFulltextIntegrationTest {
 				return true;
 			}
 		});
-		imp.setSingleTarget(SvnTarget.fromURL(repo.getUrlSvnkit()));
-		imp.run();
+		imp.setSingleTarget(SvnTarget.fromURL(svnkit.getLocation()));
+		SVNCommitInfo commitInfo;
+		try {
+			commitInfo = imp.run();
+		} finally {
+			svnkitOp.dispose();
+		}
+		
+		schedule.start();
+		try {
+			indexing.sync(new RepoRevision(commitInfo.getNewRevision(), commitInfo.getDate()));
+		} finally {
+			schedule.stop();
+		}
 		
 		QueryResponse all = solr.query(new SolrQuery("*:*"));
 		assertEquals("Should have indexed all v1 documents (31), folders (9), history (31+9) and commits (2)", 31 + 9 + (31+9) + 2, all.getResults().getNumFound());
@@ -99,14 +127,15 @@ public class ItemFulltextIntegrationTest {
 	
 	@Test
 	public void testInvalidXml() throws SolrServerException, IOException {
+		IndexingItemStandalone item = new IndexingItemStandalone("se/repos/indexing/fulltext/datasets/tiny-invalidxml/test1.xml");
+		item.getFields().setField("id", "invalidxml");
+		item.getFields().setField("head", true);
+
 		HandlerFulltext handler = new HandlerFulltext();
-		TestIndexOptions options = new TestIndexOptions().itemDefaults().addHandler(handler);
-		ReposTestIndexing indexing = ReposTestIndexing.getInstance(options);
-		
-		CmsRepositoryFilexml repo = new CmsRepositoryFilexml("http://host/svn/test",
-				new FilexmlSourceClasspath("se/repos/indexing/fulltext/datasets/tiny-invalidxml"));
-		FilexmlRepositoryReadonly filexml = new FilexmlRepositoryReadonly(repo);
-		SolrClient solr = indexing.enable(new ReposTestBackendFilexml(filexml)).getCore("repositem");
+		handler.handle(item);
+		new SolrAdd(repositem, item.getFields()).run();
+		repositem.commit();
+		SolrClient solr = repositem;
 		
 		SolrDocumentList all = solr.query(new SolrQuery("text_error:\"must be terminated\" AND head:true")).getResults();
 		assertEquals("should index extraction errors", 1, all.getNumFound());
