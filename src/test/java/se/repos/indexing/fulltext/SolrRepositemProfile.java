@@ -13,7 +13,7 @@ public class SolrRepositemProfile implements QuarkusTestProfile {
 	public Map<String, String> getConfigOverrides() {
 		return Map.of(
 				"quarkus.solr.devservices.core", "repositem",
-				// This profile is Solr-only. SVN values are placeholders for the current SVN extension config mapping.
+				// TODO Remove these placeholders when the SVN extension allows quarkus.svn.enabled=false without connection config.
 				"quarkus.svn.enabled", "false",
 				"quarkus.svn.devservices.enabled", "false",
 				"quarkus.svn.hostname", "localhost",
