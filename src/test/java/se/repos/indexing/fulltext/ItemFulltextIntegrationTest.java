@@ -25,13 +25,12 @@ import org.tmatesoft.svn.core.wc2.SvnOperationFactory;
 import org.tmatesoft.svn.core.wc2.SvnTarget;
 
 import jakarta.enterprise.context.control.ActivateRequestContext;
+import jakarta.enterprise.event.Event;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import se.repos.indexing.ReposIndexing;
 import se.repos.indexing.item.IndexingItemStandalone;
-import se.repos.indexing.scheduling.IndexingSchedule;
 import se.repos.indexing.solrj.SolrAdd;
 import se.simonsoft.cms.item.RepoRevision;
 
@@ -51,10 +50,7 @@ public class ItemFulltextIntegrationTest {
 	SolrClient repositem;
 
 	@Inject
-	ReposIndexing indexing;
-
-	@Inject
-	IndexingSchedule schedule;
+	Event<PostCommitEvent> postCommit;
 
 	@Inject
 	SVNRepository svnkit;
@@ -101,12 +97,7 @@ public class ItemFulltextIntegrationTest {
 			svnkitOp.dispose();
 		}
 		
-		schedule.start();
-		try {
-			indexing.sync(new RepoRevision(commitInfo.getNewRevision(), commitInfo.getDate()));
-		} finally {
-			schedule.stop();
-		}
+		postCommit.fire(new PostCommitEvent(new RepoRevision(commitInfo.getNewRevision(), commitInfo.getDate())));
 		
 		QueryResponse all = solr.query(new SolrQuery("*:*"));
 		assertEquals("Should have indexed all v1 documents (31), folders (9), history (31+9) and commits (2)", 31 + 9 + (31+9) + 2, all.getResults().getNumFound());
