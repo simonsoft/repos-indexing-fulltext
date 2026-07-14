@@ -8,6 +8,8 @@ import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import se.repos.indexing.ReposIndexing;
 import se.repos.indexing.scheduling.IndexingSchedule;
+import se.simonsoft.cms.item.RepoRevision;
+import se.simonsoft.svn.runtime.SvnRevisionAvailableEvent;
 
 @ApplicationScoped
 public class PostCommitIndexingObserver {
@@ -18,10 +20,10 @@ public class PostCommitIndexingObserver {
 	@Inject
 	IndexingSchedule schedule;
 
-	public void onPostCommit(@Observes PostCommitEvent event) {
+	public void onPostCommit(@Observes SvnRevisionAvailableEvent event) {
 		schedule.start();
 		try {
-			indexing.sync(event.revision());
+			indexing.sync(new RepoRevision(event.revision(), null));
 		} finally {
 			schedule.stop();
 		}

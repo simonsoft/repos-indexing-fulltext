@@ -5,7 +5,6 @@ package se.repos.indexing.fulltext;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -16,23 +15,16 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.ISVNFileFilter;
-import org.tmatesoft.svn.core.wc2.SvnImport;
-import org.tmatesoft.svn.core.wc2.SvnOperationFactory;
-import org.tmatesoft.svn.core.wc2.SvnTarget;
 
 import jakarta.enterprise.context.control.ActivateRequestContext;
-import jakarta.enterprise.event.Event;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import se.repos.indexing.item.IndexingItemStandalone;
 import se.repos.indexing.solrj.SolrAdd;
-import se.simonsoft.cms.item.RepoRevision;
 
 /**
  * Test queries on files in an actual test repository.
@@ -50,9 +42,6 @@ public class ItemFulltextIntegrationTest {
 	SolrClient repositem;
 
 	@Inject
-	Event<PostCommitEvent> postCommit;
-
-	@Inject
 	SVNRepository svnkit;
 	
 	@AfterEach
@@ -68,36 +57,8 @@ public class ItemFulltextIntegrationTest {
 	@Test
 	@ActivateRequestContext
 	public void testHandleSearch1Docs() throws SVNException, SolrServerException, IOException {
-		File docs = new File("src/test/resources/repos-search-v1");
-		assertTrue(docs.isDirectory());
-		
 		SolrClient solr = repositem;
-		
-		SvnOperationFactory svnkitOp = new SvnOperationFactory();
-		svnkitOp.setAuthenticationManager(svnkit.getAuthenticationManager());
-		SvnImport imp = svnkitOp.createImport();
-		imp.setSource(docs);
-		imp.setFileFilter(new ISVNFileFilter() {
-			
-			@Override
-			public boolean accept(File file) throws SVNException {
-				
-				//System.out.println("testHandleSearch1Docs - importing: " + file.getName());
-				if (".gitignore".equals(file.getName())) {
-					return false;
-				}
-				return true;
-			}
-		});
-		imp.setSingleTarget(SvnTarget.fromURL(svnkit.getLocation()));
-		SVNCommitInfo commitInfo;
-		try {
-			commitInfo = imp.run();
-		} finally {
-			svnkitOp.dispose();
-		}
-		
-		postCommit.fire(new PostCommitEvent(new RepoRevision(commitInfo.getNewRevision(), commitInfo.getDate())));
+		assertEquals(1, svnkit.getLatestRevision());
 		
 		QueryResponse all = solr.query(new SolrQuery("*:*"));
 		assertEquals("Should have indexed all v1 documents (31), folders (9), history (31+9) and commits (2)", 31 + 9 + (31+9) + 2, all.getResults().getNumFound());
