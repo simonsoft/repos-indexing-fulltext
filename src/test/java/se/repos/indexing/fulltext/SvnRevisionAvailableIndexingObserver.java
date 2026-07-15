@@ -12,7 +12,7 @@ import se.simonsoft.cms.item.RepoRevision;
 import se.simonsoft.svn.runtime.SvnRevisionAvailableEvent;
 
 @ApplicationScoped
-public class PostCommitIndexingObserver {
+public class SvnRevisionAvailableIndexingObserver {
 
 	@Inject
 	ReposIndexing indexing;
@@ -20,7 +20,7 @@ public class PostCommitIndexingObserver {
 	@Inject
 	IndexingSchedule schedule;
 
-	public void onPostCommit(@Observes SvnRevisionAvailableEvent event) {
+	public void onRevisionAvailable(@Observes SvnRevisionAvailableEvent event) {
 		schedule.start();
 		try {
 			indexing.sync(new RepoRevision(event.revision(), null));
