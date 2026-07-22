@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>repos-indexing</artifactId>
-			<version>0.21.1-SNAPSHOT</version>
+			<version>0.22.0-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Keep Tika 1.25 for releases 2022 Q1-Q2. -->
