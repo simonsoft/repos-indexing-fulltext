@@ -34,11 +34,33 @@
 		</repository>		
 	</repositories>
 
+	<properties>
+		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+		<quarkus.platform.version>3.34.6</quarkus.platform.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<mockito-version>5.21.0</mockito-version>
+		<surefire-plugin.version>3.2.5</surefire-plugin.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>${quarkus.platform.group-id}</groupId>
+				<artifactId>${quarkus.platform.artifact-id}</artifactId>
+				<version>${quarkus.platform.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>repos-indexing</artifactId>
-			<version>0.21.0</version>
+			<version>0.22.0-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Keep Tika 1.25 for releases 2022 Q1-Q2. -->
@@ -66,11 +88,49 @@
 			<version>1.25</version>
 		</dependency>		
 		<dependency>
-			<groupId>se.simonsoft</groupId>
-			<artifactId>cms-backend-filexml</artifactId>
-			<version>0.21.2-SNAPSHOT</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+			<!-- Solr Dev Service expects the core layout as classpath:/solr. Reuse repos-indexing's repositem core config instead of duplicating it here. -->
+			<testResource>
+				<directory>../repos-indexing/src/main/resources/se/repos/indexing/solr/repositem</directory>
+				<targetPath>solr</targetPath>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire-plugin.version}</version>
+				<configuration>
+					<argLine>
+						-Djava.util.logging.manager=org.jboss.logmanager.LogManager
+						--add-opens java.base/java.lang=ALL-UNNAMED
+						--add-opens java.base/java.lang.invoke=ALL-UNNAMED
+						-XX:+EnableDynamicAgentLoading
+					</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	
 </project>

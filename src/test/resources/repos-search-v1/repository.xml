@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lists>
+	<list>
+		<entry kind="dir">
+			<name>.</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/codeproject</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/codeproject/branches</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/codeproject/trunk</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/filenames</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/images</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/images/howto screenshots</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/nötäscii</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="dir">
+			<name>docs/svnprops</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/Excel format.xls</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/OpenOffice Calc.ods</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/Repos Search reads Open Document Format.odt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/Word document.doc</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/codeproject/trunk/somecode.js</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/codeproject/trunk/somecode2.js</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/empty.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/filenames/In Swedish Åäö.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/filenames/Latin1 accents áéèà.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/filenames/Subversion-related Document2, 2010-02-10.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/filenames/SubversionRelated DNR333 ver 11.2.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/filenames/short, not long, filename.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/filenames/shouldBeUniqueFilename.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/howto screenshots/windows_itag.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/howto screenshots/xnviewmp026_comment.png</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/howto screenshots/xnviewmp026_keywords.png</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/howto screenshots/xnviewmp026_settings.png</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_acdsee9.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_acdseemac.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_digikam120.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_gthumb.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_itag.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_pspcs2mac.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_commented_xnviewmp026.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/images/testJPEG_gpsphotolinker.jpg</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/nötäscii/über.bin</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/svnprops/longpropertyvalue.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/svnprops/shortpdf.pdf</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/svnprops/textwithsvnprops.txt</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+		<entry kind="file">
+			<name>docs/testkeywords-gen.sh</name>
+			<commit revision="1">
+				<author>test</author>
+			</commit>
+			<properties>
+			</properties>
+		</entry>
+	</list>
+</lists>
