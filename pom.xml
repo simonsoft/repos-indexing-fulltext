@@ -37,7 +37,7 @@
 	<properties>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-		<quarkus.platform.version>3.34.6</quarkus.platform.version>
+		<quarkus.platform.version>3.35.4</quarkus.platform.version>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<mockito-version>5.21.0</mockito-version>
