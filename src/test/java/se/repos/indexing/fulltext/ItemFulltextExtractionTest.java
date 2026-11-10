@@ -120,6 +120,7 @@ public class ItemFulltextExtractionTest {
 
 		// Seen some note about DC-subject should be both keywords and subject. 
 		assertEquals("Subject", "The PDF subject", fields.getFieldValue("embd_subject"));
+		assertEquals("CP subject without prior Office extraction", "The PDF subject", fields.getFieldValue("xmp_cp.subject"));
 		assertEquals("Keywords", "keywordinsaveaspdf someotherkeyword", fields.getFieldValue("embd_meta.keyword"));
 		// Field "xmp_dc.subject" changed to null from Tika 1.14 to 1.23.
 		//assertEquals("Keywords", "keywordinsaveaspdf someotherkeyword", fields.getFieldValue("xmp_dc.subject"));

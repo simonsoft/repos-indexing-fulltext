@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.OfficeOpenXMLCore;
 import org.apache.tika.xmp.XMPMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import se.repos.indexing.item.HandlerPathinfo;
 import se.repos.indexing.item.IndexingItemProgress;
 import se.simonsoft.cms.item.events.change.CmsChangesetItem;
 
+import com.adobe.xmp.XMPException;
 import com.adobe.xmp.XMPIterator;
 import com.adobe.xmp.options.PropertyOptions;
 import com.adobe.xmp.properties.XMPPropertyInfo;
@@ -35,7 +37,16 @@ public class HandlerFulltext implements IndexingItemHandler {
 	 */
 	private static final String METADATA_MULTIVALUE_SEPARATOR = "\n";
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(HandlerFulltext.class);
+
+	static {
+		try {
+			// Register cp before extraction so PDF metadata does not depend on prior Office files.
+			XMPMetadata.registerNamespace(OfficeOpenXMLCore.NAMESPACE_URI, OfficeOpenXMLCore.PREFIX);
+		} catch (XMPException e) {
+			logger.error("XMP namespace registration failed: {}", e.getMessage(), e);
+		}
+	}
 	
 	/**
 	 * Because we depend on field updates (the "head" flag) for historical items in incremental indexing,

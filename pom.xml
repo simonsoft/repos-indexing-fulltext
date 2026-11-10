@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<artifactId>repos-indexing-fulltext</artifactId>
-	<version>0.21.3-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>jar</packaging>
 	
 	<name>Repos Indexing - Fulltext</name>
@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>se.repos</groupId>
 		<artifactId>maven-parent</artifactId>
-		<version>11.0.2</version>
+		<version>21.0-SNAPSHOT</version>
 		<relativePath/>
 	</parent>
 	
@@ -30,18 +30,14 @@
 		<repository>
 			<id>repos.open.repo</id>
 			<name>Simonsoft / Repos Open Repository</name>
-			<url>http://opensource.simonsoft.se/maven/</url>
+			<url>https://opensource.simonsoft.se/maven/</url>
 		</repository>		
 	</repositories>
 
 	<properties>
+		<revision>0.40-SNAPSHOT</revision>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-		<quarkus.platform.version>3.34.6</quarkus.platform.version>
-		<maven.compiler.source>21</maven.compiler.source>
-		<maven.compiler.target>21</maven.compiler.target>
-		<mockito-version>5.21.0</mockito-version>
-		<surefire-plugin.version>3.2.5</surefire-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -60,7 +56,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>repos-indexing</artifactId>
-			<version>0.22.0-SNAPSHOT</version>
+			<version>0.40-PR2-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Keep Tika 1.25 for releases 2022 Q1-Q2. -->
@@ -88,9 +84,18 @@
 			<version>1.25</version>
 		</dependency>		
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>${mockito-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -106,21 +111,10 @@
 	</dependencies>
 
 	<build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-			</testResource>
-			<!-- Solr Dev Service expects the core layout as classpath:/solr. Reuse repos-indexing's repositem core config instead of duplicating it here. -->
-			<testResource>
-				<directory>../repos-indexing/src/main/resources/se/repos/indexing/solr/repositem</directory>
-				<targetPath>solr</targetPath>
-			</testResource>
-		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire-plugin.version}</version>
 				<configuration>
 					<argLine>
 						-Djava.util.logging.manager=org.jboss.logmanager.LogManager
@@ -128,6 +122,16 @@
 						--add-opens java.base/java.lang.invoke=ALL-UNNAMED
 						-XX:+EnableDynamicAgentLoading
 					</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<!-- Preserve existing Simonsoft/Apache headers during license:format. -->
+					<validHeaders combine.children="append">
+						<validHeader>src/license-header-simonsoft.txt</validHeader>
+					</validHeaders>
 				</configuration>
 			</plugin>
 		</plugins>

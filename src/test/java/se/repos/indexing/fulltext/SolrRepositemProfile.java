@@ -12,7 +12,6 @@ public class SolrRepositemProfile implements QuarkusTestProfile {
 	@Override
 	public Map<String, String> getConfigOverrides() {
 		return Map.of(
-				"quarkus.solr.devservices.core", "repositem",
 				// TODO Remove these placeholders when the SVN extension allows quarkus.svn.enabled=false without connection config.
 				"quarkus.svn.enabled", "false",
 				"quarkus.svn.devservices.enabled", "false",
