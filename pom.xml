@@ -30,7 +30,7 @@
 		<repository>
 			<id>repos.open.repo</id>
 			<name>Simonsoft / Repos Open Repository</name>
-			<url>http://opensource.simonsoft.se/maven/</url>
+			<url>https://opensource.simonsoft.se/maven/</url>
 		</repository>		
 	</repositories>
 
@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>repos-indexing</artifactId>
-			<version>0.40.0-SNAPSHOT</version>
+			<version>0.40-PR2-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Keep Tika 1.25 for releases 2022 Q1-Q2. -->
@@ -106,16 +106,6 @@
 	</dependencies>
 
 	<build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-			</testResource>
-			<!-- Solr Dev Service expects the core layout as classpath:/solr. Reuse repos-indexing's repositem core config instead of duplicating it here. -->
-			<testResource>
-				<directory>../repos-indexing/src/main/resources/se/repos/indexing/solr/repositem</directory>
-				<targetPath>solr</targetPath>
-			</testResource>
-		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
